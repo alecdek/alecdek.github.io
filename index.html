@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MARK3T</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,900&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
     body {
@@ -49,7 +50,6 @@
     }
     .intro-screen {
       font-family: Helvetica, sans-serif;
-      font-size: 4rem;
       font-weight: bold;
       color: white;
       position: relative;
@@ -58,15 +58,21 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      flex-direction: column;
     }
-    .intro-cursor {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: white;
-      pointer-events: none;
-      z-index: 10;
+    .intro-subtitle {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 300;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      color: #ff0000;
+    }
+    #intro-text {
+      font-size: 4rem;
+      font-family: Helvetica, sans-serif;
+      color: white;
     }
     h1 {
       font-size: 2rem;
@@ -100,6 +106,7 @@
       margin-top: 2rem;
       gap: 1rem;
       border: 1px solid #333;
+      border-radius: 8px;
       padding: 2rem;
       background: rgba(0, 0, 0, 0.5);
     }
@@ -126,11 +133,6 @@
       background-color: #ff0055;
       color: #0a0a0a;
     }
-    .g-recaptcha {
-      margin-top: 0.5rem;
-      transform: scale(0.95);
-      transform-origin: left;
-    }
     .hint {
       margin-top: 2rem;
       font-size: 0.85rem;
@@ -154,89 +156,85 @@
       color: #0a0a0a;
     }
   </style>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
   <div class="intro-screen" id="intro-screen">
+    <div class="intro-subtitle" id="subtitle-text"></div>
     <div id="intro-text"></div>
-    <div class="intro-cursor" id="intro-cursor"></div>
   </div>
 
   <div class="container main-content" id="main-content">
     <h1>La Séance // Recrutement</h1>
     <div class="typewriter" id="type-container"><div class="cursor" id="cursor"></div></div>
-
     <button class="cta" onclick="revealForm()">Rencontre-nous</button>
-
     <form id="formulaire" action="https://formsubmit.co/projetprojo2025@gmail.com" method="POST">
       <input type="text" name="Nom" placeholder="Qui es-tu ?" required>
       <textarea name="Intention" placeholder="Pourquoi tu veux participer ?" rows="4" required></textarea>
       <input type="text" name="Portfolio" placeholder="Lien vers ton site ou réseaux (facultatif)">
-      <div class="g-recaptcha" data-sitekey="your_site_key_here"></div>
       <input type="hidden" name="_captcha" value="false">
       <button type="submit">Envoyer</button>
     </form>
-
     <p class="hint">(Présente-toi et dis-nous ce qui t'intéresse)</p>
   </div>
 
   <script>
-    const intro = "PROVOQUER LES CHOSES";
-    const introContainer = document.getElementById("intro-text");
-    const introCursor = document.getElementById("intro-cursor");
-    let i = 0;
+    const subtitle = "6MOIS PRÉSENTE";
+    const title = "PROVOQUER LES CHOSES";
+    const subtitleEl = document.getElementById("subtitle-text");
+    const titleEl = document.getElementById("intro-text");
 
-    function typeIntro() {
-      if (i < intro.length) {
+    let i = 0;
+    function typeSubtitle() {
+      if (i < subtitle.length) {
         const span = document.createElement('span');
-        span.textContent = intro.charAt(i);
-        introContainer.appendChild(span);
+        span.textContent = subtitle.charAt(i);
+        subtitleEl.appendChild(span);
         i++;
-        setTimeout(() => {
-          const rect = span.getBoundingClientRect();
-          const parentRect = introContainer.getBoundingClientRect();
-          introCursor.style.left = `${rect.right - parentRect.left}px`;
-          introCursor.style.top = `${rect.top - parentRect.top}px`;
-          typeIntro();
-        }, 80);
+        setTimeout(typeSubtitle, 60);
       } else {
-        setTimeout(() => {
-          document.getElementById('intro-screen').style.display = 'none';
-          const main = document.getElementById('main-content');
-          main.style.display = 'block';
-          startMainText();
-        }, 800);
+        j = 0;
+        setTimeout(typeTitle, 500);
       }
     }
 
-    function startMainText() {
-      const text = `Ceci n'est pas une offre d'emploi.
+    let j = 0;
+    function typeTitle() {
+      if (j < title.length) {
+        const span = document.createElement('span');
+        span.textContent = title.charAt(j);
+        titleEl.appendChild(span);
+        j++;
+        setTimeout(typeTitle, 70);
+      } else {
+        setTimeout(() => {
+          document.getElementById('intro-screen').style.display = 'none';
+          document.getElementById('main-content').style.display = 'block';
+          startMainText();
+        }, 1500);
+      }
+    }
+
+    const text = `Ceci n'est pas une offre d'emploi.
 Ceci n'est pas une blague.
 Ceci est une mission.
 
 Nous allons projeter notre premier long-métrage dans un grand cinéma parisien début 2026.
 Nous cherchons un petit groupe de passionnés de marketing pour créer la meilleure campagne publicitaire indépendante de France.`;
 
-      const container = document.getElementById("type-container");
-      const cursor = document.getElementById("cursor");
-      let index = 0;
+    const container = document.getElementById("type-container");
+    const cursor = document.getElementById("cursor");
+    let index = 0;
 
+    function startMainText() {
       function typeChar() {
         if (index < text.length) {
           const span = document.createElement('span');
           span.textContent = text.charAt(index);
           container.insertBefore(span, cursor);
           index++;
-          setTimeout(() => {
-            const rect = span.getBoundingClientRect();
-            const parentRect = container.getBoundingClientRect();
-            cursor.style.left = `${rect.right - parentRect.left}px`;
-            cursor.style.top = `${rect.top - parentRect.top}px`;
-            typeChar();
-          }, 28);
+          setTimeout(typeChar, 28);
         }
       }
-
       typeChar();
     }
 
@@ -245,7 +243,7 @@ Nous cherchons un petit groupe de passionnés de marketing pour créer la meille
       form.style.display = 'flex';
     }
 
-    typeIntro();
+    typeSubtitle();
   </script>
 </body>
 </html>
